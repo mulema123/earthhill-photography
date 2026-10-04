@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Earthhill Photography — cinematic photography in Kampala, Uganda. Weddings, portraits, graduations, events and commercial photography.">
+<title>Earthhill Photography | Kampala, Uganda</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --black:#030303;
+  --black-2:#080808;
+  --panel:#101010;
+  --gold:#f5c518;
+  --gold-soft:#ffdf68;
+  --white:#fff;
+  --muted:#a5a5a5;
+  --line:rgba(255,255,255,.10);
+  --max:1280px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:"DM Sans",sans-serif;
+  overflow-x:hidden;
+}
+body.no-scroll{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+img{display:block;max-width:100%}
+
+/* ---------- LOADER ---------- */
+.loader{
+  position:fixed;inset:0;z-index:99999;
+  background:#020202;
+  display:grid;place-items:center;
+  transition:opacity .8s,visibility .8s;
+}
+.loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loader-inner{text-align:center}
+.loader-mark{
+  width:64px;height:64px;margin:0 auto 22px;
+  border:1px solid rgba(245,197,24,.35);
+  border-radius:50%;
+  display:grid;place-items:center;
+  position:relative;
+  animation:loaderSpin 2s linear infinite;
+}
+.loader-mark:before{
+  content:"";width:25px;height:25px;border:2px solid var(--gold);
+  border-radius:50%;
+}
+.loader-name{font-size:12px;letter-spacing:6px;font-weight:800}
+.loader-name span{color:var(--gold)}
+.loader-bar{width:210px;height:2px;background:#222;margin:22px auto 0;overflow:hidden}
+.loader-bar i{display:block;width:45%;height:100%;background:var(--gold);animation:loaderBar 1.3s ease-in-out infinite}
+@keyframes loaderSpin{to{transform:rotate(360deg)}}
+@keyframes loaderBar{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ---------- GLOBAL FX ---------- */
+#particleCanvas{position:fixed;inset:0;z-index:2;pointer-events:none}
+.cursor-glow{
+  position:fixed;z-index:3;pointer-events:none;
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,197,24,.10),transparent 68%);
+  transform:translate(-50%,-50%);
+  mix-blend-mode:screen;
+}
+.noise{
+  position:fixed;inset:0;z-index:4;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+.section{position:relative;z-index:5;padding:120px 5%}
+.container{width:min(var(--max),100%);margin:auto}
+.eyebrow{
+  color:var(--gold);font-size:11px;letter-spacing:4px;
+  text-transform:uppercase;font-weight:800;margin-bottom:18px
+}
+.section-title{
+  font-size:clamp(38px,6vw,76px);line-height:.98;
+  letter-spacing:-3px;font-weight:800
+}
+.section-title em{font-family:"Playfair Display",serif;font-weight:600;color:var(--gold)}
+.section-copy{color:var(--muted);line-height:1.8;max-width:650px;margin-top:22px}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}
+.reveal.visible{opacity:1;transform:none}
+
+/* ---------- NAV ---------- */
+.navbar{
+  position:fixed;top:0;left:0;width:100%;height:82px;z-index:1000;
+  padding:0 5%;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(3,3,3,.48);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.07)
+}
+.logo{font-size:21px;font-weight:800;letter-spacing:3px}
+.logo span{color:var(--gold)}
+.logo small{display:block;color:#777;font-size:7px;letter-spacing:3px;margin-top:3px}
+.nav-links{display:flex;gap:30px;list-style:none}
+.nav-links a{font-size:13px;color:#ddd;position:relative}
+.nav-links a:after{
+  content:"";position:absolute;left:0;bottom:-8px;width:0;height:2px;
+  background:var(--gold);transition:.3s
+}
+.nav-links a:hover:after,.nav-links a.active:after{width:100%}
+.nav-contact{
+  border:1px solid var(--gold);color:var(--gold);
+  border-radius:999px;padding:11px 18px;font-size:12px;font-weight:700;
+  transition:.3s
+}
+.nav-contact:hover{background:var(--gold);color:#000;transform:translateY(-2px)}
+.menu-btn{display:none;background:none;border:0;color:#fff;font-size:27px;cursor:pointer}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100svh;position:relative;overflow:hidden;
+  display:flex;align-items:center;
+  background:
+    radial-gradient(circle at 72% 48%,rgba(245,197,24,.13),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(245,197,24,.08),transparent 27%),
+    #030303;
+}
+.hero:after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,rgba(3,3,3,.94) 0%,rgba(3,3,3,.64) 42%,rgba(3,3,3,.18) 100%);
+  pointer-events:none
+}
+.gold-light{
+  position:absolute;width:650px;height:650px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,197,24,.18),transparent 65%);
+  filter:blur(35px);z-index:0;animation:lightDrift 10s ease-in-out infinite alternate
+}
+.gold-light.a{left:-260px;top:5%}
+.gold-light.b{right:-300px;bottom:-260px;animation-delay:-3s}
+@keyframes lightDrift{to{transform:translate(150px,100px) scale(1.25)}}
+
+.hero-content{position:relative;z-index:20;width:min(650px);margin-left:7%;padding:100px 0 170px}
+.hero-kicker{color:var(--gold);font-size:12px;letter-spacing:5px;text-transform:uppercase;margin-bottom:22px}
+.hero h1{
+  font-size:clamp(58px,8vw,112px);line-height:.88;
+  letter-spacing:-6px;font-weight:800
+}
+.hero h1 span{color:var(--gold)}
+.hero-description{font-size:17px;line-height:1.8;color:#bdbdbd;max-width:530px;margin-top:30px}
+.buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 23px;border-radius:999px;font-weight:800;font-size:13px;
+  transition:.35s;cursor:pointer
+}
+.btn-gold{background:var(--gold);color:#050505}
+.btn-outline{border:1px solid #666;color:#fff}
+.btn:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(245,197,24,.18)}
+.hero-meta{
+  display:flex;gap:25px;margin-top:35px;color:#777;font-size:11px;letter-spacing:1px
+}
+.hero-meta strong{color:#ddd;display:block;font-size:13px;margin-bottom:4px}
+
+/* ---------- FLOATING PHOTO CARDS ---------- */
+.photo-stage{position:absolute;inset:0;z-index:12;pointer-events:none}
+.photo{
+  position:absolute;padding:8px;background:#101010;
+  border:1px solid rgba(245,197,24,.38);
+  box-shadow:0 25px 80px rgba(0,0,0,.72),0 0 30px rgba(245,197,24,.07);
+  overflow:hidden;pointer-events:auto;will-change:transform;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s;
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo:after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.5))
+}
+.photo:hover{
+  transform:scale(1.1) rotate(0deg)!important;
+  border-color:var(--gold);z-index:50;
+  box-shadow:0 35px 100px rgba(0,0,0,.9),0 0 50px rgba(245,197,24,.22)
+}
+.photo1{width:290px;height:380px;right:19%;top:17%;transform:rotate(-8deg);animation:float1 7s ease-in-out infinite}
+.photo2{width:195px;height:255px;right:4%;top:16%;transform:rotate(9deg);animation:float2 8s ease-in-out infinite}
+.photo3{width:215px;height:285px;right:5%;bottom:13%;transform:rotate(-6deg);animation:float3 7s ease-in-out infinite}
+.photo4{width:175px;height:225px;right:28%;bottom:7%;transform:rotate(8deg);animation:float4 9s ease-in-out infinite}
+.photo5{width:145px;height:185px;right:43%;top:9%;transform:rotate(12deg);animation:float5 8s ease-in-out infinite}
+@keyframes float1{50%{translate:0 -24px}}
+@keyframes float2{50%{translate:12px 22px}}
+@keyframes float3{50%{translate:-12px -20px}}
+@keyframes float4{50%{translate:10px -28px}}
+@keyframes float5{50%{translate:-10px 18px}}
+
+/* ---------- FALLING PHOTOS ---------- */
+.falling-photo{
+  position:fixed;top:-220px;width:115px;height:155px;padding:5px;
+  background:#111;border:1px solid rgba(245,197,24,.45);
+  z-index:10;pointer-events:none;box-shadow:0 20px 55px rgba(0,0,0,.7);
+  animation:fallPhoto linear forwards
+}
+.falling-photo img{width:100%;height:100%;object-fit:cover}
+@keyframes fallPhoto{
+  0%{transform:translate3d(0,-20px,0) rotate(-30deg) scale(.5);opacity:0}
+  12%{opacity:1}
+  100%{transform:translate3d(var(--drift),115vh,0) rotate(var(--spin)) scale(1);opacity:0}
+}
+
+/* ---------- CAMERA ---------- */
+.camera{
+  position:absolute;right:14%;bottom:5%;width:130px;height:80px;
+  border:2px solid rgba(255,255,255,.16);border-radius:16px;
+  z-index:8;opacity:.35;transform:rotate(-12deg);
+  animation:cameraFloat 5s ease-in-out infinite alternate
+}
+.camera:before{
+  content:"";position:absolute;width:52px;height:52px;left:37px;top:12px;
+  border:7px solid #666;border-radius:50%
+}
+.camera:after{
+  content:"";position:absolute;width:38px;height:12px;left:19px;top:-12px;
+  background:#666;border-radius:4px
+}
+.camera i{position:absolute;width:9px;height:9px;border-radius:50%;right:13px;top:15px;background:var(--gold)}
+@keyframes cameraFloat{to{transform:translateY(-30px) rotate(-2deg)}}
+
+/* ---------- HERO SERVICES ---------- */
+.services-strip{
+  position:absolute;left:5%;right:5%;bottom:0;z-index:25;
+  min-height:110px;display:grid;grid-template-columns:repeat(5,1fr);
+  background:rgba(7,7,7,.78);backdrop-filter:blur(16px);
+  border-top:1px solid rgba(245,197,24,.25)
+}
+.service{padding:20px 24px;border-right:1px solid var(--line)}
+.service:last-child{border:0}
+.service-number{color:var(--gold);font-size:10px;letter-spacing:2px}
+.service h3{font-size:16px;margin-top:6px}
+.service p{font-size:11px;color:#777;margin-top:5px}
+
+/* ---------- SCROLL ---------- */
+.scroll-cue{
+  position:absolute;left:7%;bottom:135px;z-index:25;
+  font-size:9px;letter-spacing:3px;color:#777
+}
+.scroll-cue span{display:block;width:1px;height:44px;background:var(--gold);margin-top:10px;animation:pulseLine 1.5s infinite}
+@keyframes pulseLine{0%,100%{height:0;opacity:0}50%{height:44px;opacity:1}}
+
+/* ---------- ABOUT ---------- */
+.about{background:linear-gradient(180deg,#030303,#080808)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+.about-visual{position:relative;min-height:580px}
+.about-main{
+  position:absolute;width:72%;height:80%;left:5%;top:7%;
+  object-fit:cover;border:1px solid rgba(245,197,24,.3)
+}
+.about-small{
+  position:absolute;width:42%;height:43%;right:0;bottom:0;
+  object-fit:cover;border:7px solid #080808;outline:1px solid rgba(245,197,24,.25)
+}
+.frame{
+  position:absolute;inset:0 8% 8% 0;border:1px solid rgba(245,197,24,.18);
+  transform:rotate(3deg);pointer-events:none
+}
+.about-badge{
+  position:absolute;left:0;bottom:5%;background:var(--gold);color:#050505;
+  padding:22px 24px;font-weight:800
+}
+.about-badge b{font-size:30px;display:block;line-height:1}
+.about-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}
+.about-list div{border-top:1px solid var(--line);padding-top:14px;color:#ddd;font-size:13px}
+.about-list span{color:var(--gold);margin-right:8px}
+
+/* ---------- SERVICES ---------- */
+.services-section{background:#070707}
+.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:55px}
+.service-card{
+  min-height:280px;padding:32px;background:#0d0d0d;border:1px solid var(--line);
+  position:relative;overflow:hidden;transition:.4s
+}
+.service-card:before{
+  content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+  background:rgba(245,197,24,.08);right:-60px;bottom:-60px;transition:.5s
+}
+.service-card:hover{transform:translateY(-8px);border-color:rgba(245,197,24,.45)}
+.service-card:hover:before{transform:scale(1.7)}
+.icon{font-size:32px;margin-bottom:55px}
+.service-card .num{font-size:10px;color:var(--gold);letter-spacing:3px}
+.service-card h3{font-size:25px;margin:8px 0}
+.service-card p{color:#777;font-size:13px;line-height:1.7}
+
+/* ---------- GALLERY ---------- */
+.gallery{background:#030303}
+.gallery-head{display:flex;justify-content:space-between;gap:30px;align-items:end}
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(12,1fr);
+  grid-auto-rows:110px;gap:12px;margin-top:50px
+}
+.g-item{position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.06)}
+.g-item:nth-child(1){grid-column:span 5;grid-row:span 4}
+.g-item:nth-child(2){grid-column:span 3;grid-row:span 3}
+.g-item:nth-child(3){grid-column:span 4;grid-row:span 5}
+.g-item:nth-child(4){grid-column:span 3;grid-row:span 4}
+.g-item:nth-child(5){grid-column:span 4;grid-row:span 4}
+.g-item:nth-child(6){grid-column:span 5;grid-row:span 3}
+.g-item:nth-child(7){grid-column:span 4;grid-row:span 3}
+.g-item img{width:100%;height:100%;object-fit:cover;transition:.7s}
+.g-item:after{
+  content:"View";position:absolute;inset:auto 16px 16px auto;
+  background:rgba(0,0,0,.65);color:#fff;padding:7px 10px;font-size:10px;
+  letter-spacing:2px;opacity:0;transform:translateY(8px);transition:.3s
+}
+.g-item:hover img{transform:scale(1.08)}
+.g-item:hover:after{opacity:1;transform:none}
+
+/* ---------- PROCESS ---------- */
+.process{background:#080808}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);margin-top:55px;border-top:1px solid var(--line)}
+.step{padding:30px 20px 30px 0;border-right:1px solid var(--line)}
+.step:last-child{border:0;padding-left:20px}
+.step-number{font-family:"Playfair Display",serif;color:var(--gold);font-size:35px}
+.step h3{margin:20px 0 8px}
+.step p{font-size:13px;line-height:1.7;color:#777}
+
+/* ---------- CTA ---------- */
+.cta{
+  margin:0 5%;padding:90px 7%;position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 80% 50%,rgba(245,197,24,.22),transparent 32%),
+    linear-gradient(120deg,#0c0c0c,#111);
+  border:1px solid rgba(245,197,24,.22)
+}
+.cta:before{
+  content:"EARTHHILL";position:absolute;right:-20px;bottom:-40px;
+  font-size:18vw;font-weight:800;color:rgba(255,255,255,.025);letter-spacing:-10px
+}
+.cta-content{position:relative;z-index:2;max-width:750px}
+.cta h2{font-size:clamp(42px,6vw,78px);line-height:1;letter-spacing:-3px}
+.cta p{color:#aaa;line-height:1.8;margin:22px 0 30px}
+
+/* ---------- FOOTER ---------- */
+footer{
+  position:relative;z-index:5;background:#020202;
+  padding:80px 5% 25px;border-top:1px solid var(--line)
+}
+.footer-grid{width:min(var(--max),100%);margin:auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:50px}
+.footer-brand .logo{font-size:25px}
+.footer-brand p{color:#777;max-width:330px;line-height:1.8;font-size:13px;margin:18px 0}
+.footer-title{font-size:11px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px}
+.footer-links{list-style:none;display:grid;gap:11px}
+.footer-links a{color:#888;font-size:13px;transition:.25s}
+.footer-links a:hover{color:#fff;transform:translateX(4px)}
+.footer-contact{display:grid;gap:13px;color:#888;font-size:13px}
+.footer-contact a:hover{color:var(--gold)}
+.social-row{display:flex;gap:9px;margin-top:20px}
+.social-row a{
+  width:38px;height:38px;border:1px solid #333;border-radius:50%;
+  display:grid;place-items:center;font-size:13px;transition:.3s
+}
+.social-row a:hover{background:var(--gold);color:#000;border-color:var(--gold);transform:translateY(-4px)}
+.footer-bottom{
+  width:min(var(--max),100%);margin:55px auto 0;padding-top:20px;
+  border-top:1px solid var(--line);display:flex;justify-content:space-between;
+  gap:20px;color:#555;font-size:11px
+}
+.back-top{color:var(--gold);cursor:pointer}
+
+/* ---------- LIGHTBOX ---------- */
+.lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:99990;
+  display:grid;place-items:center;padding:30px;opacity:0;visibility:hidden;transition:.35s
+}
+.lightbox.open{opacity:1;visibility:visible}
+.lightbox img{max-width:min(1000px,92vw);max-height:86vh;object-fit:contain;border:1px solid rgba(245,197,24,.35)}
+.close-lightbox{
+  position:absolute;right:25px;top:20px;background:none;border:0;color:#fff;
+  font-size:35px;cursor:pointer
+}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:1050px){
+  .nav-links{gap:18px}
+  .photo1{right:9%;opacity:.75}
+  .photo5{display:none}
+  .services-strip{grid-template-columns:repeat(3,1fr)}
+  .service:nth-child(n+4){display:none}
+  .about-grid{gap:45px}
+}
+@media(max-width:760px){
+  .navbar{height:70px}
+  .nav-links{
+    position:absolute;top:70px;left:0;right:0;
+    background:rgba(4,4,4,.97);backdrop-filter:blur(18px);
+    display:none;flex-direction:column;gap:0;border-bottom:1px solid var(--line)
+  }
+  .nav-links.open{display:flex}
+  .nav-links li{border-top:1px solid var(--line)}
+  .nav-links a{display:block;padding:17px 5%}
+  .nav-contact{display:none}
+  .menu-btn{display:block}
+  .hero{min-height:900px;align-items:flex-start}
+  .hero-content{margin-left:6%;padding-top:150px;width:88%}
+  .hero h1{font-size:clamp(53px,15vw,78px);letter-spacing:-4px}
+  .hero-description{font-size:14px}
+  .hero-meta{gap:14px;flex-wrap:wrap}
+  .photo1{width:170px;height:225px;right:-12px;top:24%;opacity:.34}
+  .photo2{width:125px;height:165px;right:2%;top:50%;opacity:.28}
+  .photo3{width:145px;height:190px;right:-5px;bottom:22%;opacity:.28}
+  .photo4{display:none}
+  .camera{right:8%;bottom:22%;opacity:.22;transform:scale(.75) rotate(-12deg)}
+  .scroll-cue{display:none}
+  .services-strip{
+    left:0;right:0;bottom:0;grid-template-columns:repeat(2,1fr)
+  }
+  .service{padding:14px}
+  .service:nth-child(n+3){display:none}
+  .section{padding:80px 6%}
+  .about-grid{grid-template-columns:1fr}
+  .about-visual{min-height:450px}
+  .about-main{width:78%;height:78%}
+  .about-small{width:48%;height:40%}
+  .service-grid{grid-template-columns:1fr}
+  .gallery-head{display:block}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px}
+  .g-item:nth-child(n){grid-column:span 1;grid-row:span 1}
+  .g-item:nth-child(1),.g-item:nth-child(4){grid-row:span 2}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .step:nth-child(2){padding-left:20px}
+  .step:nth-child(3),.step:nth-child(4){border-top:1px solid var(--line)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px 25px}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column}
+  .cursor-glow{display:none}
+}
+@media(max-width:430px){
+  .hero{min-height:850px}
+  .hero-content{padding-top:135px}
+  .buttons .btn{width:100%}
+  .gallery-grid{grid-auto-rows:150px}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-brand{grid-column:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+
+<body>
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="loader-mark"></div>
+    <div class="loader-name">EARTHHILL <span>PHOTOGRAPHY</span></div>
+    <div class="loader-bar"><i></i></div>
+  </div>
+</div>
+
+<canvas id="particleCanvas"></canvas>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="noise"></div>
+
+<header class="navbar">
+  <a class="logo" href="#home">
+    EARTHHILL <span>PHOTOGRAPHY</span>
+    <small>CAPTURING TODAY • PRESERVING TOMORROW</small>
+  </a>
+
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a class="active" href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <a class="nav-contact" href="tel:+256707273273">+256 707 273273</a>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="gold-light a"></div>
+  <div class="gold-light b"></div>
+
+  <div class="hero-content">
+    <div class="hero-kicker">Earthhill Photography • Kampala, Uganda</div>
+    <h1>WE CAPTURE<br><span>REAL MOMENTS.</span></h1>
+    <p class="hero-description">
+      More than photographs. We create cinematic visual stories around
+      people, celebrations, milestones and memories that deserve to live forever.
+    </p>
+
+    <div class="buttons">
+      <a href="#portfolio" class="btn btn-gold">📷 Explore Portfolio</a>
+      <a href="https://wa.me/256707273273?text=Hello%20Earthhill%20Photography%2C%20I%20would%20like%20to%20book%20a%20session." class="btn btn-outline" target="_blank" rel="noopener">Book a Session</a>
+    </div>
+
+    <div class="hero-meta">
+      <div><strong>Weddings</strong>Love in every frame</div>
+      <div><strong>Portraits</strong>Your story, your style</div>
+      <div><strong>Events</strong>Moments that remain</div>
+    </div>
+  </div>
+
+  <div class="photo-stage" id="photoStage">
+    <div class="photo photo1"><img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=90" alt="African woman portrait"></div>
+    <div class="photo photo2"><img src="r1.png" alt="Portrait photography"></div>
+    <div class="photo photo3"><img src="e1.jpeg" alt="Graduation photography"></div>
+    <div class="photo photo4"><img src="r5.jpg" alt="Event photography"></div>
+    <div class="photo photo5"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=90" alt="Professional camera"></div>
+  </div>
+
+  <div class="camera"><i></i></div>
+
+  <div class="scroll-cue">SCROLL TO EXPLORE<span></span></div>
+
+  <div class="services-strip">
+    <div class="service"><div class="service-number">01</div><h3>Weddings</h3><p>Your love, our focus</p></div>
+    <div class="service"><div class="service-number">02</div><h3>Graduations</h3><p>Milestones in style</p></div>
+    <div class="service"><div class="service-number">03</div><h3>Events</h3><p>Memories for life</p></div>
+    <div class="service"><div class="service-number">04</div><h3>Portraits</h3><p>Be you, beautifully</p></div>
+    <div class="service"><div class="service-number">05</div><h3>Commercial</h3><p>Your brand, our creativity</p></div>
+  </div>
+</section>
+
+<section class="section about" id="about">
+  <div class="container about-grid">
+    <div class="about-visual reveal">
+      <div class="frame"></div>
+      <img class="about-main" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=90" alt="Wedding photography">
+      <img class="about-small" src="r4.jpg" alt="Portrait photography">
+      <div class="about-badge"><b>UG</b>KAMPALA<br>EST. EARTHHILL</div>
+    </div>
+
+    <div class="reveal">
+      <div class="eyebrow">The Earthhill story</div>
+      <h2 class="section-title">YOUR MOMENT.<br><em>OUR LENS.</em></h2>
+      <p class="section-copy">
+        Earthhill Photography is built around one idea: a great photograph should
+        make you feel something. From intimate portraits to energetic celebrations,
+        we combine direction, composition and cinematic storytelling to preserve
+        the atmosphere of the day.
+      </p>
+
+      <div class="about-list">
+        <div><span>01</span>Creative direction</div>
+        <div><span>02</span>Cinematic editing</div>
+        <div><span>03</span>Professional coverage</div>
+        <div><span>04</span>Fast communication</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section services-section" id="services">
+  <div class="container">
+    <div class="eyebrow reveal">What we do</div>
+    <h2 class="section-title reveal">PHOTOGRAPHY WITH<br><em>CHARACTER.</em></h2>
+    <p class="section-copy reveal">Choose a visual experience built around your occasion, personality and story.</p>
+
+    <div class="service-grid">
+      <article class="service-card reveal"><div class="icon">💍</div><div class="num">01 / WEDDINGS</div><h3>Wedding Stories</h3><p>Natural emotion, elegant portraits and the moments you never want to forget.</p></article>
+      <article class="service-card reveal"><div class="icon">🎓</div><div class="num">02 / GRADUATIONS</div><h3>Graduation</h3><p>Turn a major achievement into a polished visual story you can keep forever.</p></article>
+      <article class="service-card reveal"><div class="icon">🎉</div><div class="num">03 / EVENTS</div><h3>Events</h3><p>Dynamic coverage for birthdays, launches, parties, church events and celebrations.</p></article>
+      <article class="service-card reveal"><div class="icon">📸</div><div class="num">04 / PORTRAITS</div><h3>Portraits</h3><p>Confident, expressive portraits with lighting and posing designed for you.</p></article>
+      <article class="service-card reveal"><div class="icon">🏢</div><div class="num">05 / COMMERCIAL</div><h3>Commercial</h3><p>Professional images for brands, products, teams, campaigns and social media.</p></article>
+      <article class="service-card reveal"><div class="icon">✨</div><div class="num">06 / CREATIVE</div><h3>Creative Sessions</h3><p>Concept-driven shoots for artists, creators and anyone who wants something different.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section gallery" id="portfolio">
+  <div class="container">
+    <div class="gallery-head">
+      <div>
+        <div class="eyebrow reveal">Selected frames</div>
+        <h2 class="section-title reveal">THE <em>PORTFOLIO.</em></h2>
+      </div>
+      <p class="section-copy reveal">Tap any image to view it larger. Replace these sample images with your own Earthhill photographs.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="g-item reveal"><img src="r7.jpeg" alt="Wedding couple"></div>
+      <div class="g-item reveal"><img src="r6.png" alt="Portrait"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1000&q=90" alt="Graduation"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=90" alt="Event"></div>
+      <div class="g-item reveal"><img src="unnamed.webp" alt="Portrait session"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1000&q=90" alt="Celebration"></div>
+      <div class="g-item reveal"><img src="r2.png" alt="Male portrait"></div>
+      <div class="g-item reveal"><img src="r5.jpg" alt="Male portrait"></div>
+      <div class="g-item reveal"><img src="wed1.jpeg" alt="Male portrait"></div>
+      <div class="g-item reveal"><img src="shoot.jpeg" alt="Male portrait"></div>
+      <div class="g-item reveal"><img src="wed.jpeg" alt="Male portrait"></div>
+      <div class="g-item reveal"><img src="e1.jpeg" alt="Male portrait"></div>
+     <div class="g-item reveal"><img src="md 2.png" alt="Male portrait"></div>
+   
+    </div>
+  </div>
+</section>
+
+<section class="section process" id="process">
+  <div class="container">
+    <div class="eyebrow reveal">Simple process</div>
+    <h2 class="section-title reveal">FROM <em>IDEA</em><br>TO FRAME.</h2>
+    <div class="process-grid">
+      <div class="step reveal"><div class="step-number">01</div><h3>Tell us your story</h3><p>Share the occasion, date, location and the kind of photographs you want.</p></div>
+      <div class="step reveal"><div class="step-number">02</div><h3>Plan the shoot</h3><p>We discuss the mood, locations, timing and creative direction.</p></div>
+      <div class="step reveal"><div class="step-number">03</div><h3>Capture the moment</h3><p>Relax and enjoy the day while we focus on authentic moments and strong frames.</p></div>
+      <div class="step reveal"><div class="step-number">04</div><h3>Receive your story</h3><p>Your selected images are professionally edited and prepared for you.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="cta reveal">
+    <div class="cta-content">
+      <div class="eyebrow">Ready when you are</div>
+      <h2>LET'S CREATE SOMETHING <em>TIMELESS.</em></h2>
+      <p>Planning a wedding, graduation, portrait session or event in Kampala? Talk to Earthhill Photography and let's turn your idea into photographs.</p>
+      <div class="buttons">
+        <a class="btn btn-gold" href="https://wa.me/256707273273?text=Hello%20Earthhill%20Photography%2C%20I%20would%20like%20to%20make%20a%20booking." target="_blank" rel="noopener">WhatsApp Us</a>
+        <a class="btn btn-outline" href="tel:+256707273273">Call +256 707 273273</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">EARTHHILL <span>PHOTOGRAPHY</span></div>
+      <p>Capturing real people, real emotions and real moments in cinematic frames across Kampala and beyond.</p>
+      <div class="social-row">
+        <a href="#" aria-label="Facebook">f</a>
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-title">Explore</div>
+      <ul class="footer-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Earthhill</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-title">Services</div>
+      <ul class="footer-links">
+        <li><a href="#services">Weddings</a></li>
+        <li><a href="#services">Graduations</a></li>
+        <li><a href="#services">Events</a></li>
+        <li><a href="#services">Portraits</a></li>
+        <li><a href="#services">Commercial</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-title">Contact</div>
+      <div class="footer-contact">
+        <a href="tel:+256707273273">+256 707 273273</a>
+        <a href="https://wa.me/256707273273" target="_blank" rel="noopener">WhatsApp</a>
+        <span>Kirombe Stage,<br>Bukasa Road, Kampala</span>
+        <span>Uganda</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Earthhill Photography. All rights reserved.</span>
+    <span class="back-top" id="backTop">BACK TO TOP ↑</span>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="close-lightbox" id="closeLightbox" aria-label="Close image">×</button>
+  <img id="lightboxImage" src="" alt="Expanded portfolio image">
+</div>
+
+<script>
+/* ---------- LOADER ---------- */
+window.addEventListener("load", () => {
+  setTimeout(() => document.getElementById("loader").classList.add("hide"), 900);
+});
+
+/* ---------- MOBILE MENU ---------- */
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => navLinks.classList.toggle("open"));
+navLinks.querySelectorAll("a").forEach(a => {
+  a.addEventListener("click", () => navLinks.classList.remove("open"));
+});
+
+/* ---------- CURRENT YEAR ---------- */
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ---------- MOUSE GLOW ---------- */
+const glow = document.getElementById("cursorGlow");
+window.addEventListener("pointermove", e => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
+
+/* ---------- GOLD PARTICLES ---------- */
+const canvas = document.getElementById("particleCanvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+function resizeCanvas(){
+  canvas.width = innerWidth * dpr;
+  canvas.height = innerHeight * dpr;
+  canvas.style.width = innerWidth + "px";
+  canvas.style.height = innerHeight + "px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+resizeCanvas();
+addEventListener("resize", resizeCanvas);
+
+function makeParticle(){
+  return {
+    x:Math.random()*innerWidth,
+    y:innerHeight + Math.random()*innerHeight,
+    r:Math.random()*2.2+.5,
+    speed:Math.random()*.55+.2,
+    drift:(Math.random()-.5)*.45,
+    alpha:Math.random()*.55+.15
+  };
+}
+for(let i=0;i<90;i++) particles.push(makeParticle());
+
+function particleLoop(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  particles.forEach(p=>{
+    p.y -= p.speed;
+    p.x += p.drift;
+    if(p.y < -10 || p.x < -20 || p.x > innerWidth+20){
+      Object.assign(p,makeParticle());
+    }
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(245,197,24,${p.alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(particleLoop);
+}
+particleLoop();
+
+/* ---------- FALLING PHOTOS ---------- */
+const fallingImages = [
+  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=500&q=80",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
+  "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=500&q=80",
+  "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=500&q=80",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80",
+  "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80",
+  "r1.png",
+  "r2.png",
+  "r3.png",
+  "mr ssekayita.png",
+  "md.jpeg",
+  "r4.jpg"
+];
+
+function dropPhoto(){
+  if(document.hidden) return;
+  const card = document.createElement("div");
+  card.className = "falling-photo";
+
+  const img = document.createElement("img");
+  img.src = fallingImages[Math.floor(Math.random()*fallingImages.length)];
+  img.alt = "Earthhill sample photograph";
+
+  card.appendChild(img);
+  card.style.left = Math.random()*100 + "vw";
+  card.style.setProperty("--drift", (Math.random()*260-130) + "px");
+  card.style.setProperty("--spin", (Math.random()*420-210) + "deg");
+  const duration = 6 + Math.random()*5;
+  card.style.animationDuration = duration + "s";
+  document.body.appendChild(card);
+
+  setTimeout(()=>card.remove(), (duration+1)*1000);
+}
+
+function randomDrop(){
+  dropPhoto();
+  setTimeout(randomDrop, 1400 + Math.random()*2600);
+}
+setTimeout(randomDrop, 1800);
+
+/* ---------- HERO PARALLAX ---------- */
+const hero = document.querySelector(".hero");
+const cards = document.querySelectorAll(".photo");
+
+hero.addEventListener("pointermove", e=>{
+  if(innerWidth < 760) return;
+  const rx = (innerWidth/2-e.clientX)/45;
+  const ry = (innerHeight/2-e.clientY)/45;
+  cards.forEach((card,i)=>{
+    const speed = (i+1)*.55;
+    card.style.marginLeft = rx*speed + "px";
+    card.style.marginTop = ry*speed + "px";
+  });
+});
+
+hero.addEventListener("pointerleave",()=>{
+  cards.forEach(card=>{
+    card.style.marginLeft="0";
+    card.style.marginTop="0";
+  });
+});
+
+/* ---------- RANDOM CARD ROTATION ---------- */
+setInterval(()=>{
+  cards.forEach(card=>{
+    const r = -10 + Math.random()*20;
+    card.style.rotate = r + "deg";
+  });
+},4200);
+
+/* ---------- SCROLL REVEAL ---------- */
+const revealObserver = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+},{threshold:.12});
+
+document.querySelectorAll(".reveal").forEach(el=>revealObserver.observe(el));
+
+/* ---------- ACTIVE NAV ---------- */
+const sections = document.querySelectorAll("main section[id]");
+const navAnchors = document.querySelectorAll(".nav-links a");
+
+const navObserver = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      navAnchors.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+entry.target.id));
+    }
+  });
+},{rootMargin:"-40% 0px -50% 0px"});
+
+sections.forEach(section=>navObserver.observe(section));
+
+/* ---------- GALLERY LIGHTBOX ---------- */
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = document.getElementById("lightboxImage");
+const closeLightbox = document.getElementById("closeLightbox");
+
+document.querySelectorAll(".g-item img").forEach(img=>{
+  img.addEventListener("click",()=>{
+    lightboxImage.src = img.src;
+    lightboxImage.alt = img.alt;
+    lightbox.classList.add("open");
+    document.body.classList.add("no-scroll");
+  });
+});
+
+function closeBox(){
+  lightbox.classList.remove("open");
+  document.body.classList.remove("no-scroll");
+}
+closeLightbox.addEventListener("click",closeBox);
+lightbox.addEventListener("click",e=>{if(e.target===lightbox) closeBox()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape") closeBox()});
+
+/* ---------- BACK TO TOP ---------- */
+document.getElementById("backTop").addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
+
+/* ---------- SMART REDUCED MOTION ---------- */
+if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  document.querySelectorAll(".falling-photo").forEach(el=>el.remove());
+}
+</script>
+</body>
+</html>
